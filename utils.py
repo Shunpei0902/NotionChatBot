@@ -25,23 +25,23 @@ def load_chain():
   llm = ChatOpenAI(temperature=0)
   
   # Load our local FAISS index as a retriever
-  vector_store = FAISS.load_local("faiss_index", embeddings)
+  vector_store = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
   retriever = vector_store.as_retriever(search_kwargs={"k": 3})
   
   # Create memory 'chat_history' 
   memory = ConversationBufferWindowMemory(k=3,memory_key="chat_history")
   
   # Create system prompt
-    template = """
-    あなたはエンジニアの個人ナレッジメモについての質問に答えるAIアシスタントです。
-		長い文書から抽出された以下の部分と質問が与えられます。会話形式で答えを提供してください。
-		もし答えがわからなければ、「申し訳ありませんが、わかりません…😔」と言ってください。
-		答えをでっち上げないでください。
-		もし質問がエンジニアの個人ナレッジメモに関するものでなければ、あなたがエンジニアの個人ナレッジメモに関する質問のみに答えるよう設定されていることを丁寧に伝えてください。
-    
-		{context}
-		質問: {question}
-		役に立つ答え:"""
+  template = """
+  あなたはエンジニアの個人ナレッジメモについての質問に答えるAIアシスタントです。
+  長い文書から抽出された以下の部分と質問が与えられます。会話形式で答えを提供してください。
+  もし答えがわからなければ、「申し訳ありませんが、わかりません…😔」と言ってください。
+  答えをでっち上げないでください。
+  もし質問がエンジニアの個人ナレッジメモに関するものでなければ、あなたがエンジニアの個人ナレッジメモに関する質問のみに答えるよう設定されていることを丁寧に伝えてください。
+  
+  {context}
+  質問: {question}
+  役に立つ答え:"""
   
   # Create the Conversational Chain
   chain = ConversationalRetrievalChain.from_llm(llm=llm, 

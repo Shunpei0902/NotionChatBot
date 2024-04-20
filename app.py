@@ -8,7 +8,7 @@ bot_icon = 'https://www.app.nl/wp-content/uploads/2019/01/Blendle.png'
 # Configure Streamlit page
 st.set_page_config(
     page_title="Your Notion Chatbot",
-    page_icon=company_logo
+    page_icon = bot_icon,
 )
 
 # Initialize LLM chain in session_state
